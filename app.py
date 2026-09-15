@@ -2,47 +2,177 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Set page configuration for wide mode
-st.set_page_config(layout='wide')
+# Set page configuration
+st.set_page_config(
+    page_title="Delivery Delay Prediction",
+    page_icon="🍓",
+    layout="wide"
+)
 
-# Custom CSS for baby pink background
+# Custom CSS
 st.markdown(
     """
     <style>
-    .main {
-        background-color: #F8C8DC; /* Baby pink color */
+    /* Full page baby pink background */
+    .stApp {
+        background-color: #F8C8DC;
+    }
+
+    /* Main content */
+    .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    /* Title styling */
+    h1 {
+        color: #C2185B;
+        text-align: center;
+        font-family: Arial, sans-serif;
+        font-weight: 700;
+    }
+
+    /* Subtitle / normal text */
+    p {
+        color: #5A2942;
+    }
+
+    /* Strawberry decorations */
+    .strawberry-left {
+        position: fixed;
+        top: 20px;
+        left: 25px;
+        font-size: 55px;
+        z-index: 999;
+    }
+
+    .strawberry-right {
+        position: fixed;
+        top: 20px;
+        right: 25px;
+        font-size: 55px;
+        z-index: 999;
+    }
+
+    .strawberry-bottom-left {
+        position: fixed;
+        bottom: 20px;
+        left: 25px;
+        font-size: 45px;
+        z-index: 999;
+    }
+
+    .strawberry-bottom-right {
+        position: fixed;
+        bottom: 20px;
+        right: 25px;
+        font-size: 45px;
+        z-index: 999;
+    }
+
+    /* Button styling */
+    .stButton > button {
+        background-color: #E75480;
+        color: white;
+        border-radius: 12px;
+        border: none;
+        padding: 10px 25px;
+        font-weight: bold;
+    }
+
+    .stButton > button:hover {
+        background-color: #C2185B;
+        color: white;
+    }
+
+    /* Input boxes */
+    div[data-baseweb="select"] > div {
+        background-color: #FFF0F5;
+    }
+
+    /* Slider labels */
+    label {
+        color: #5A2942 !important;
+    }
+
+    /* Resources heading */
+    h2 {
+        color: #C2185B;
     }
     </style>
+
+    <!-- Strawberry decorations -->
+    <div class="strawberry-left">🍓</div>
+    <div class="strawberry-right">🍓</div>
+    <div class="strawberry-bottom-left">🍓</div>
+    <div class="strawberry-bottom-right">🍓</div>
     """,
     unsafe_allow_html=True
 )
 
 # Load the trained model
-# Make sure 'logi.sav' is in the same directory as this app.py file
 logi = joblib.load('logi.sav')
 
-st.title('Delivery Delay Prediction App')
-st.write('Enter the details below to predict if there will be a delivery delay.')
+# Title
+st.title('🍓 Delivery Delay Prediction App 🍓')
 
-# Input features (based on X.columns)
-# From previous output: Index(['Delivery_Distance', 'Traffic_Congestion', 'Weather_Condition',
-#        'Delivery_Slot', 'Driver_Experience', 'Num_Stops', 'Vehicle_Age',
-#        'Road_Condition_Score', 'Package_Weight', 'Fuel_Efficiency',
-#        'Warehouse_Processing_Time'], dtype='object')
+st.markdown(
+    "<p style='text-align:center; font-size:18px;'>"
+    "Enter the details below to predict if there will be a delivery delay."
+    "</p>",
+    unsafe_allow_html=True
+)
 
-delivery_distance = st.slider('Delivery Distance (km)', 1.0, 50.0, 25.0)
-traffic_congestion = st.selectbox('Traffic Congestion (1-5, 5=High)', [1, 2, 3, 4, 5])
-weather_condition = st.selectbox('Weather Condition (1-5, 5=Bad)', [1, 2, 3, 4, 5])
-delivery_slot = st.selectbox('Delivery Slot (1-3)', [1, 2, 3])
-driver_experience = st.slider('Driver Experience (years)', 0, 20, 5)
-num_stops = st.slider('Number of Stops', 1, 10, 3)
-vehicle_age = st.slider('Vehicle Age (years)', 0, 15, 5)
-road_condition_score = st.selectbox('Road Condition Score (1-5, 5=Good)', [1, 2, 3, 4, 5])
-package_weight = st.slider('Package Weight (kg)', 0.1, 150.0, 50.0)
-fuel_efficiency = st.slider('Fuel Efficiency (km/l)', 5.0, 25.0, 15.0)
-warehouse_processing_time = st.slider('Warehouse Processing Time (minutes)', 1, 120, 60)
+# Input features
+delivery_distance = st.slider(
+    'Delivery Distance (km)', 1.0, 50.0, 25.0
+)
 
-# Create a DataFrame for the input
+traffic_congestion = st.selectbox(
+    'Traffic Congestion (1-5, 5=High)',
+    [1, 2, 3, 4, 5]
+)
+
+weather_condition = st.selectbox(
+    'Weather Condition (1-5, 5=Bad)',
+    [1, 2, 3, 4, 5]
+)
+
+delivery_slot = st.selectbox(
+    'Delivery Slot (1-3)',
+    [1, 2, 3]
+)
+
+driver_experience = st.slider(
+    'Driver Experience (years)', 0, 20, 5
+)
+
+num_stops = st.slider(
+    'Number of Stops', 1, 10, 3
+)
+
+vehicle_age = st.slider(
+    'Vehicle Age (years)', 0, 15, 5
+)
+
+road_condition_score = st.selectbox(
+    'Road Condition Score (1-5, 5=Good)',
+    [1, 2, 3, 4, 5]
+)
+
+package_weight = st.slider(
+    'Package Weight (kg)', 0.1, 150.0, 50.0
+)
+
+fuel_efficiency = st.slider(
+    'Fuel Efficiency (km/l)', 5.0, 25.0, 15.0
+)
+
+warehouse_processing_time = st.slider(
+    'Warehouse Processing Time (minutes)', 1, 120, 60
+)
+
+# Create DataFrame
 input_data = pd.DataFrame([{
     'Delivery_Distance': delivery_distance,
     'Traffic_Congestion': traffic_congestion,
@@ -57,19 +187,34 @@ input_data = pd.DataFrame([{
     'Warehouse_Processing_Time': warehouse_processing_time
 }])
 
-if st.button('Predict Delivery Delay'):
+# Prediction
+if st.button('🍓 Predict Delivery Delay'):
+
     prediction = logi.predict(input_data)
     prediction_proba = logi.predict_proba(input_data)
 
     if prediction[0] == 1:
-        st.error(f'Prediction: \n **Delivery Delay is Likely!**')
+        st.error(
+            "🍓 **Prediction: Delivery Delay is Likely!**"
+        )
     else:
-        st.success(f'Prediction: \n **No Delivery Delay is Expected.**')
+        st.success(
+            "🍓 **Prediction: No Delivery Delay is Expected.**"
+        )
 
-    st.write(f'Probability of Delay: {prediction_proba[0][1]:.2f}')
-    st.write(f'Probability of No Delay: {prediction_proba[0][0]:.2f}')
+    st.write(
+        f"**Probability of Delay:** "
+        f"{prediction_proba[0][1]:.2f}"
+    )
 
-st.markdown('## Resources')
+    st.write(
+        f"**Probability of No Delay:** "
+        f"{prediction_proba[0][0]:.2f}"
+    )
+
+# Resources
+st.markdown("## 🍓 Resources")
+
 st.markdown(
     """
     - [Streamlit Documentation](https://docs.streamlit.io/)
